@@ -16,19 +16,19 @@ app.listen(PORT, console.log(`Server Running on Port ${PORT}`))
 app.use(express.json())
 
 
-app.use("/test", (req, res) => {
+app.get("/test", (req, res) => {
     return res.json({ status: 200, message: "OK" })
 })
-app.use("/time", (req, res) => {
+app.get("/time", (req, res) => {
     const now = new Date()
     return res.json({ status: 200, message: now.getHours() + ':' + now.getMinutes() })
 })
-app.use("/hello/:id?", (req, res) => {
+app.get("/hello/:id?", (req, res) => {
     const id = req.params.id || "";
 
     return res.json({ status: 200, message: `Hello, ${id}` })
 })
-app.use("/search", (req, res) => {
+app.get("/search", (req, res) => {
     const s = req.query.s;
     if (s) {
         return res.json({ status: 200, message: 'ok', data: s })
@@ -38,7 +38,7 @@ app.use("/search", (req, res) => {
     }
 })
 
-app.use("/movies/read/id/:id", (req, res) => {
+app.get("/movies/read/id/:id", (req, res) => {
     const id = req.params.id;
     const i = movies.findIndex(obj => obj.id == id)
     if (i === -1) {
@@ -48,7 +48,7 @@ app.use("/movies/read/id/:id", (req, res) => {
         return res.json({ status: 200, data: movies[i] })
     }
 })
-app.use("/movies/read/:sort?", (req, res) => {
+app.get("/movies/read/:sort?", (req, res) => {
     const sort = req.params.sort;
     if (!sort) {
         return res.json({ status: 200, data: movies })
@@ -79,7 +79,7 @@ app.use("/movies/read/:sort?", (req, res) => {
 
     }
 })
-app.use("/movies/create", (req, res) => {
+app.post("/movies/create", (req, res) => {
     const { title, year } = req.query;
     const rating = req.query.rating || 4;
     if (!(title && year) || typeof parseInt(year) !== 'number' || year.toString().length !== 4) {
@@ -98,7 +98,7 @@ app.use("/movies/create", (req, res) => {
         return res.json({ status: 200, data: movies })
     }
 })
-app.use("/movies/delete/:id", (req, res) => {
+app.delete("/movies/delete/:id", (req, res) => {
     const id = req.params.id;
     const i = movies.findIndex(obj => obj.id == id)
     if (i === -1) {
@@ -109,7 +109,7 @@ app.use("/movies/delete/:id", (req, res) => {
         return res.json({ status: 200, data: movies })
     }
 })
-app.use("/movies/update/:id", (req, res) => {
+app.patch("/movies/update/:id", (req, res) => {
     const id = req.params.id;
     const i = movies.findIndex(obj => obj.id == id)
     if (i === -1) {
